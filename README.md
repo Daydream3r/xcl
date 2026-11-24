@@ -243,6 +243,17 @@ full command line, GPU power settings and any vendor-specific cache control besi
 compare interleaved HLSL/direct runs of the same hash and do not treat an in-game FPS
 screenshot as a shader-compiler benchmark.
 
+On NVIDIA, successful `ShaderCacheControl` calls can still leave repeat measurements
+cached. With the JSON/backend measurement support above, use
+`scripts/measure-nvidia-pso.ps1 -Pack D:\data\shaders.rpf -Hash HEX -Backend direct`.
+It copies the exe beside the original, registers a unique temporary NVIDIA profile
+with the shader disk cache off, and removes both afterwards, including on measurement
+failure. Other profiles and shared cache files are untouched. Run HLSL/direct
+interleaved and check the individual timings; this is compilation time, not GPU
+execution time. If the script is forcibly terminated, its printed `XCL cold PSO ...`
+profile may need removal from NVIDIA settings. Requires Windows NVIDIA NVAPI and
+permission to save an application profile; existing application matches cause an error.
+
 - **Without a command line** (xcl.exe opened from Explorer) XCL shows a small menu: *Choose a
   game…* (pick its exe or `MicrosoftGame.config`) or *Run again* (the last one). On an error the
   window stays open until Enter.
